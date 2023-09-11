@@ -42,21 +42,34 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
 
     Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-    if (message.Text is "/ping")
+    if (message.Text is "/start")
+    {
+        Message sendHello = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: "Hey, let`s check the bitcoin rate in dollars, with /bitcoin_usd \n" +
+                      "--- \n" +
+                      "By this way, you can check the rate of any cryptocurrency in any currency! \n" +
+                      "--- \n" +
+                      "Also check /help to see more.",
+                cancellationToken: cancellationToken);
+    }
+    else if (message.Text is "/ping")
     {
         string pingInfo = await cryptoRateController.GetPingInfo();
 
-        Message sentPingInfo = await botClient.SendTextMessageAsync(
+        Message sendPingInfo = await botClient.SendTextMessageAsync(
             chatId: chatId,
             text: pingInfo,
             cancellationToken: cancellationToken);
     }
     else if (message.Text is "/help")
     {
-        Message sentHelp = await botClient.SendTextMessageAsync(
+        Message sendHelp = await botClient.SendTextMessageAsync(
                 chatId: chatId,
                 text: "This bot can send you the rate of any cryptovalue! \n" +
+                      "--- \n" +
                       "To see rate, write this: \"/coinName_currencyName\" \n" +
+                      "--- \n" +
                       "See server status: \"/ping\"",
                 cancellationToken: cancellationToken);
     }
